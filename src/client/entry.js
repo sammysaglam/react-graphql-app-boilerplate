@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { BrowserRouter } from 'react-router-dom';
-import { isLoggedIn, getAccessToken } from './utils/auth';
 import { ApolloProvider } from 'react-apollo';
 
 import {
@@ -37,23 +36,16 @@ setInterval(() => {
 /* eslint-enbale no-console, no-magic-numbers */
 
 // setup apollo client
-const authLink = new ApolloLink((operation, forward) => {
-	if (isLoggedIn()) {
-		operation.setContext({
-			headers: {
-				authorization: 'Bearer ' + getAccessToken(),
-			},
-		});
-	}
-
-	return forward(operation);
-});
+const authLink = new ApolloLink((operation, forward) =>
+	forward(operation),
+);
 
 const client = new ApolloClient({
 	link: ApolloLink.from([
 		authLink,
 		new HttpLink({
 			uri: GRAPHQL_ENDPOINT,
+			credentials: 'same-origin',
 		}),
 	]),
 	// eslint-disable-next-line no-underscore-dangle

@@ -8,12 +8,12 @@ const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
 const expressJwt = require('express-jwt');
-const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const { makeExecutableSchema } = require('graphql-tools');
 const resolvers = require('./resolvers.js');
 const expressWs = require('express-ws')(express());
 const { app } = expressWs;
+const Cookies = require('cookies');
 
 const {
 	graphqlExpress,
@@ -24,7 +24,6 @@ require('dotenv').config();
 
 const {
 	JWT_SECRET,
-	JWT_EXPIRY,
 	DEV_API_PORT,
 	WEBPACKDEV_PORT,
 	USE_WEBPACKDEV_SERVER,
@@ -36,31 +35,33 @@ const typeDefs = readFileSync(
 	'utf-8',
 );
 
-const jwtSecret = JWT_SECRET;
 const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+app.use((req, res, next) => {
+	const options = { keys: ['12334'] };
+	req.cookies = new Cookies(req, res, options);
+	next();
+});
 
 app.use(
 	helmet(),
 	cors(),
 	bodyParser.json(),
 	expressJwt({
-		secret: jwtSecret,
+		secret: JWT_SECRET,
 		credentialsRequired: false,
+		getToken: req => {
+			if (
+				req.headers.authorization &&
+				req.headers.authorization.split(' ')[0] === 'Bearer'
+			) {
+				return req.headers.authorization.split(' ')[1];
+			}
+
+			return req.cookies.get('accessToken') || null;
+		},
 	}),
 );
-
-// authentication
-app.post('/authenticate', (req, res) => {
-	const { username, password } = req.body;
-	if (username !== 'sammy' || password !== 'cool') {
-		res.sendStatus(401); // eslint-disable-line no-magic-numbers
-		return;
-	}
-	const token = jwt.sign({ sub: username }, jwtSecret, {
-		...(Number(JWT_EXPIRY) ? { expiresIn: JWT_EXPIRY } : {}),
-	});
-	res.send({ token });
-});
 
 // web sockets
 app.ws('/websocket', ws => {
@@ -70,21 +71,24 @@ app.ws('/websocket', ws => {
 });
 
 // graphql
-app.use(
-	'/graphql',
-	graphqlExpress(({ user }) => ({ schema, context: { user } })),
+app.use('/graphql', (req, res) =>
+	graphqlExpress(({ user }) => ({
+		schema,
+		context: { user, req, res },
+	}))(req, res),
 );
 
 // disable favicon
 // eslint-disable-next-line no-magic-numbers
-app.get('favicon.ico', (req, res) => res.status(204));
+app.get('/favicon.ico', (req, res) => res.send(''));
+app.get('/favicon.ico/', (req, res) => res.send(''));
 
 if (USE_WEBPACKDEV_SERVER === 'true') {
 	app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 	// redirect to webpack-dev-server
 	app.all('/', (req, res) =>
-		res.redirect(`http://localhost:${WEBPACKDEV_PORT}`),
+		res.redirect(`http://0.0.0.0:${WEBPACKDEV_PORT}`),
 	);
 
 	app.listen(DEV_API_PORT, () =>
@@ -102,17 +106,25 @@ if (USE_WEBPACKDEV_SERVER === 'true') {
 	// ssr stuff
 	const { default: ssr } = require('../client/entry.ssr');
 
-	const apolloClient = new ApolloClient({
-		ssrMode: true,
-		link: createHttpLink({
-			fetch,
-			uri: 'http://localhost:3000/graphql',
-		}),
-		cache: new InMemoryCache(),
-	});
-
 	// send app to client
-	app.get('*', async ({ originalUrl }, res) => {
+	app.get('*', async ({ originalUrl, cookies }, res) => {
+		const accessToken = cookies.get('accessToken');
+		const apolloClient = new ApolloClient({
+			ssrMode: true,
+			link: createHttpLink({
+				fetch,
+				uri: 'http://0.0.0.0:3000/graphql',
+				headers: {
+					...(accessToken
+						? {
+								Authorization: 'Bearer ' + accessToken,
+						  }
+						: {}),
+				},
+			}),
+			cache: new InMemoryCache(),
+		});
+
 		const { ssrStringAsync, stylesheet } = ssr({
 			apolloClient,
 			location: originalUrl,

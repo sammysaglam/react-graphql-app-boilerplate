@@ -19,7 +19,7 @@ const htmlGenerator = require('./src/client/index.html.js');
 
 module.exports = env => {
 	// eslint-disable-next-line no-process-env, no-undef
-	const { WEBPACKDEV_PORT } = process.env;
+	const { WEBPACKDEV_PORT, DEV_API_PORT } = process.env;
 
 	const copyFiles = ({ isProduction }) =>
 		new CopyWebpackPlugin(
@@ -97,6 +97,17 @@ module.exports = env => {
 									'GET, POST, PUT, DELETE, PATCH, OPTIONS',
 								'Access-Control-Allow-Headers':
 									'X-Requested-With, content-type, Authorization',
+							},
+							proxy: {
+								'/graphql/*': {
+									target: 'http://0.0.0.0:' + DEV_API_PORT,
+								},
+								'/graphiql/*': {
+									target: 'http://0.0.0.0:' + DEV_API_PORT,
+								},
+								'/websocket/*': {
+									target: 'http://0.0.0.0:' + DEV_API_PORT,
+								},
 							},
 						},
 				  }
