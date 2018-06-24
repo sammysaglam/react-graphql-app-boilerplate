@@ -24,7 +24,11 @@ and update your EB application name in:
 [ROOT]/.elasticbeanstalk/config.yml
 ```
 
-### 4) Create EB environment
+### 4) Setup CircleCI
+
+Don't forget to env variables to CircleCI project settings.
+
+### 5) Create EB environment
 
 Next, create the following file:
 
