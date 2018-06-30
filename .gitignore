@@ -5,6 +5,7 @@ build
 yarn-error.log
 coverage
 .env
+flow-typed/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

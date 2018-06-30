@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 # copy package.json
 COPY package.json ./
 COPY yarn.lock ./
+COPY .flowconfig ./
 
 # yarn install
 RUN yarn install
