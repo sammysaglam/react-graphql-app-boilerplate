@@ -107,6 +107,7 @@ module.exports = env => {
 								},
 								'/websocket/*': {
 									target: 'http://0.0.0.0:' + DEV_API_PORT,
+									ws: true,
 								},
 							},
 						},
