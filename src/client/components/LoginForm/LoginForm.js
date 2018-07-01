@@ -1,25 +1,27 @@
+// @flow
 import React from 'react';
-import { Query, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
-import jwt from 'jsonwebtoken';
+import { UserSessionQuery } from 'graphql/queries/getCurrentUserSession';
+import USER_SESSION_QUERY from 'graphql/queries/getCurrentUserSession/getCurrentUserSession.graphql';
 
 const Wrapper = styled.div`
 	padding: 3rem;
 `;
 
-export const USER_SESSION_QUERY = gql`
-	{
-		currentUserSession {
-			email
-			isGuest
-			isAdmin
-		}
-	}
-`;
+type LoginFormPropsType = {};
 
-class LoginForm extends React.PureComponent {
-	constructor(props) {
+type LoginFormStateType = {
+	email: string,
+	password: string,
+};
+
+class LoginForm extends React.PureComponent<
+	LoginFormPropsType,
+	LoginFormStateType,
+> {
+	constructor(props: LoginFormPropsType) {
 		super(props);
 
 		this.state = {
@@ -28,18 +30,21 @@ class LoginForm extends React.PureComponent {
 		};
 	}
 
+	// $FlowFixMe
 	onChangeEmail = ({ target: { value: newValue } }) => {
 		this.setState({
 			email: newValue,
 		});
 	};
 
+	// $FlowFixMe
 	onChangePassword = ({ target: { value: newValue } }) => {
 		this.setState({
 			password: newValue,
 		});
 	};
 
+	// $FlowFixMe
 	onSubmit = authenticate => event => {
 		event.preventDefault();
 
@@ -66,9 +71,9 @@ class LoginForm extends React.PureComponent {
 					`}
 					update={(
 						cache,
-						{ data: { authenticate: responseJwt } },
+						{ data: { authenticate: responseUserData } = {} },
 					) => {
-						const { sub, isAdmin } = jwt.decode(responseJwt);
+						const { sub, isAdmin } = JSON.parse(responseUserData);
 
 						cache.writeQuery({
 							query: USER_SESSION_QUERY,
@@ -103,11 +108,11 @@ class LoginForm extends React.PureComponent {
 						</form>
 					)}
 				</Mutation>
-				<Query query={USER_SESSION_QUERY}>
+				<UserSessionQuery>
 					{({
 						data: { currentUserSession: { isAdmin } = {} } = {},
 					} = {}) => <div>{isAdmin && 'is admin'}</div>}
-				</Query>
+				</UserSessionQuery>
 			</Wrapper>
 		);
 	}

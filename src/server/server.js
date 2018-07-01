@@ -27,10 +27,9 @@ const {
 	DEV_API_PORT,
 	WEBPACKDEV_PORT,
 	USE_WEBPACKDEV_SERVER,
-} = process.env; // eslint-disable-line no-process-env, no-undef
+} = process.env;
 
 const typeDefs = readFileSync(
-	// eslint-disable-next-line no-undef
 	path.join(__dirname, './schema.graphql'),
 	'utf-8',
 );
@@ -147,3 +146,12 @@ if (USE_WEBPACKDEV_SERVER === 'true') {
 		console.log(`App running on port 3000`),
 	);
 }
+
+// error handing
+app.use((err, req, res) => {
+	if (err.name === 'UnauthorizedError') {
+		req.cookies.set('accessToken');
+	}
+	// eslint-disable-next-line no-magic-numbers
+	res.status(500).send('Something broke!');
+});

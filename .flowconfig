@@ -1,7 +1,7 @@
 [ignore]
-.*/node_modules/config-chain/test/broken.json 
-.*/coverage/.* 
-.*/build/.* 
+.*/node_modules/config-chain/test/broken.json
+.*/coverage/.*
+.*/build/.*
 .*/tests-config/.*
 
 [include]
@@ -11,5 +11,12 @@
 [lints]
 
 [options]
+module.name_mapper='^graphql/queries' ->'<PROJECT_ROOT>/src/client/graphql/queries'
+module.name_mapper='.*\(.graphql\)$' -> 'empty/object'
+module.name_mapper='.*\(.gql\)$' -> 'empty/object'
+
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
 
 [strict]

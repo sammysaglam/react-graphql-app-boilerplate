@@ -8,7 +8,7 @@ const {
 	SMTP_USER,
 	SMTP_PASS,
 	DEV_ALL_MAILS_RECIPIENT,
-} = process.env; // eslint-disable-line no-process-env, no-undef
+} = process.env;
 
 module.exports = {
 	sendMail: (() => {

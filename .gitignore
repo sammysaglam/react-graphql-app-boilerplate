@@ -5,7 +5,7 @@ build
 yarn-error.log
 coverage
 .env
-flow-typed/
+gql-schema.temp.json
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

@@ -64,7 +64,6 @@ const render = Component => {
 		</ApolloProvider>
 	);
 
-	// eslint-disable-next-line no-process-env, no-undef
 	if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 		ReactDOM.render(renderResult, document.getElementById('app'));
 	} else {

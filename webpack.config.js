@@ -18,7 +18,6 @@ require('dotenv').config();
 const htmlGenerator = require('./src/client/index.html.js');
 
 module.exports = env => {
-	// eslint-disable-next-line no-process-env, no-undef
 	const { WEBPACKDEV_PORT, DEV_API_PORT } = process.env;
 
 	const copyFiles = ({ isProduction }) =>
@@ -85,12 +84,11 @@ module.exports = env => {
 			...(isHotLoaderEnv
 				? {
 						devServer: {
-							// eslint-disable-next-line no-undef
 							contentBase: path.join(__dirname, 'build/client'),
 							hotOnly: true,
 							compress: true,
 							port: WEBPACKDEV_PORT,
-							host: 'localhost',
+							host: '0.0.0.0',
 							headers: {
 								'Access-Control-Allow-Origin': '*',
 								'Access-Control-Allow-Methods':
@@ -125,10 +123,9 @@ module.exports = env => {
 			},
 
 			output: {
-				// eslint-disable-next-line no-undef
 				path: path.join(__dirname, 'build/client'),
 				filename: '[name].js',
-				publicPath: `http://localhost:${WEBPACKDEV_PORT}/`,
+				publicPath: '/',
 			},
 
 			plugins: [
@@ -204,11 +201,28 @@ module.exports = env => {
 						loader: ['style-loader', 'css-loader', 'sass-loader'],
 						exclude: /node_modules/,
 					},
+					{
+						test: /\.(graphql|gql)$/,
+						exclude: /node_modules/,
+						loader: 'graphql-tag/loader',
+					},
 				],
 			},
 			resolve: {
 				alias: {
 					'prop-types$': path.resolve('node_modules/axe-prop-types'),
+					'graphql/queries': path.join(
+						__dirname,
+						'src/client/graphql/queries',
+					),
+					'graphql/mutations': path.join(
+						__dirname,
+						'src/client/graphql/mutations',
+					),
+					'graphql/subscriptions': path.join(
+						__dirname,
+						'src/client/graphql/subscriptions',
+					),
 				},
 			},
 		},
@@ -220,7 +234,6 @@ module.exports = env => {
 						mode: isProduction ? 'production' : 'development',
 						entry: './src/server/server.js',
 						output: {
-							// eslint-disable-next-line no-undef
 							path: path.resolve(__dirname, 'build/server'),
 							filename: 'server.js',
 							publicPath: '/',
@@ -242,10 +255,21 @@ module.exports = env => {
 									loader: 'url-loader',
 									exclude: /node_modules/,
 								},
+								{
+									test: /\.(graphql|gql)$/,
+									exclude: /node_modules/,
+									loader: 'graphql-tag/loader',
+								},
 							],
 						},
 						target: 'node',
-						externals: nodeExternals(),
+						externals: nodeExternals({
+							whitelist: [
+								/graphql\/queries/,
+								/graphql\/mutations/,
+								/graphql\/subscriptions/,
+							],
+						}),
 						plugins: [
 							new webpack.DefinePlugin({
 								'process.env': 'process.env',
@@ -264,6 +288,22 @@ module.exports = env => {
 								  ]
 								: []),
 						],
+						resolve: {
+							alias: {
+								'graphql/queries': path.join(
+									__dirname,
+									'src/client/graphql/queries',
+								),
+								'graphql/mutations': path.join(
+									__dirname,
+									'src/client/graphql/mutations',
+								),
+								'graphql/subscriptions': path.join(
+									__dirname,
+									'src/client/graphql/subscriptions',
+								),
+							},
+						},
 					},
 			  ]
 			: []),

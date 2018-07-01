@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const { JWT_SECRET, JWT_EXPIRY } = process.env; // eslint-disable-line no-process-env, no-undef
+const { JWT_SECRET, JWT_EXPIRY } = process.env;
 
 const resolvers = {
 	Query: {
@@ -26,17 +26,15 @@ const resolvers = {
 	Mutation: {
 		authenticate: (root, { email, password }, { req }) => {
 			if (email === 'sami@saglam.tk' && password === '12345') {
-				const token = jwt.sign(
-					{ sub: email, isAdmin: true },
-					JWT_SECRET,
-					{
-						...(Number(JWT_EXPIRY) ? { expiresIn: JWT_EXPIRY } : {}),
-					},
-				);
+				const userData = { sub: email, isAdmin: true };
+
+				const token = jwt.sign(userData, JWT_SECRET, {
+					...(Number(JWT_EXPIRY) ? { expiresIn: JWT_EXPIRY } : {}),
+				});
 
 				req.cookies.set('accessToken', token);
 
-				return token;
+				return JSON.stringify(userData);
 			}
 			throw new Error('invalid creds');
 		},

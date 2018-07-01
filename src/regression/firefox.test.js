@@ -1,10 +1,10 @@
 import selenium, { By } from 'selenium-webdriver';
 
 const driver = new selenium.Builder()
-	.withCapabilities(selenium.Capabilities.chrome())
+	.withCapabilities(selenium.Capabilities.firefox())
 	.build();
 
-const TIMEOUT = 10000;
+const TIMEOUT = 20000;
 
 // eslint-disable-next-line jest/no-hooks
 afterAll(() => {

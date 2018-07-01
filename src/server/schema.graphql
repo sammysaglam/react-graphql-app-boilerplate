@@ -1,6 +1,6 @@
 type Query {
-	currentUserSession: UserSession
-	greeting: String,
+	currentUserSession: UserSession!
+	greeting: String
 	sensitiveData: String
 }
 
