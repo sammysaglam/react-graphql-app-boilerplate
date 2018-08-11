@@ -16,6 +16,36 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 require('dotenv').config();
 
 const htmlGenerator = require('./src/client/index.html.js');
+const babelConfig = {
+	babelrc: false,
+	presets: [
+		[
+			'env',
+			{
+				modules: false,
+				targets: {
+					node: 'current',
+				},
+			},
+		],
+		'react',
+		'flow',
+	],
+	plugins: [
+		'transform-object-rest-spread',
+		'transform-class-properties',
+		'babel-plugin-styled-components',
+	],
+	env: {
+		test: {
+			presets: [['env'], 'react'],
+		},
+	},
+};
+const babelConfigWithReactHotloader = {
+	...babelConfig,
+	plugins: [...babelConfig.plugins, 'react-hot-loader/babel'],
+};
 
 module.exports = env => {
 	const { WEBPACKDEV_PORT, DEV_API_PORT } = process.env;
@@ -174,17 +204,21 @@ module.exports = env => {
 						exclude: /node_modules/,
 						use: {
 							loader: 'babel-loader',
-							options: {
-								plugins: isHotLoaderEnv
-									? ['react-hot-loader/babel']
-									: [],
-							},
+							options: isHotLoaderEnv
+								? babelConfigWithReactHotloader
+								: babelConfig,
 						},
 					},
 					{
 						test: /\.md/,
 						exclude: /node_modules/,
-						loader: ['babel-loader', 'axe-markdown-loader'],
+						use: [
+							{
+								loader: 'babel-loader',
+								options: babelConfig,
+							},
+							'axe-markdown-loader',
+						],
 					},
 					{
 						test: /\.(png|jpg|jpeg|gif|ttf|woff|eot)$/,
