@@ -16,36 +16,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 require('dotenv').config();
 
 const htmlGenerator = require('./src/client/index.html.js');
-const babelConfig = {
-	babelrc: false,
-	presets: [
-		[
-			'env',
-			{
-				modules: false,
-				targets: {
-					node: 'current',
-				},
-			},
-		],
-		'react',
-		'flow',
-	],
-	plugins: [
-		'transform-object-rest-spread',
-		'transform-class-properties',
-		'babel-plugin-styled-components',
-	],
-	env: {
-		test: {
-			presets: [['env'], 'react'],
-		},
-	},
-};
-const babelConfigWithReactHotloader = {
-	...babelConfig,
-	plugins: [...babelConfig.plugins, 'react-hot-loader/babel'],
-};
 
 module.exports = env => {
 	const { WEBPACKDEV_PORT, DEV_API_PORT } = process.env;
@@ -205,8 +175,8 @@ module.exports = env => {
 						use: {
 							loader: 'babel-loader',
 							options: isHotLoaderEnv
-								? babelConfigWithReactHotloader
-								: babelConfig,
+								? { plugins: ['react-hot-loader/babel'] }
+								: {},
 						},
 					},
 					{
@@ -215,7 +185,6 @@ module.exports = env => {
 						use: [
 							{
 								loader: 'babel-loader',
-								options: babelConfig,
 							},
 							'axe-markdown-loader',
 						],

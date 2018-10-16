@@ -1,8 +1,25 @@
 {
-  "presets": ["babel-preset-expo"],
-  "env": {
-    "development": {
-      "plugins": ["transform-react-jsx-source"]
-    }
-  }
+	"presets": [
+		[
+			"env",
+			{
+				"modules": false,
+				"targets": {
+					"node": "current"
+				}
+			}
+		],
+		"react",
+		"flow"
+	],
+	"plugins": [
+		"transform-object-rest-spread",
+		"transform-class-properties",
+		"babel-plugin-styled-components"
+	],
+	"env": {
+		"test": {
+			"presets": [["env"], "react"]
+		}
+	}
 }
