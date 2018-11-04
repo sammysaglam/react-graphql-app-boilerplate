@@ -5,7 +5,7 @@ import { Query } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import USER_SESSION_QUERY from './getCurrentUserSession.graphql';
-import type { getCurrentUserSession as CurrentUserSessionData } from './getCurrentUserSession';
+import type { getCurrentUserSession as CurrentUserSessionData } from './__generated__/getCurrentUserSession';
 
 type UserSessionQueryPropsType = {
 	children: QueryRenderPropFunction<CurrentUserSessionData, void>,

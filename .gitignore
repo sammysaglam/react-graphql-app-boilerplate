@@ -6,10 +6,17 @@ yarn-error.log
 coverage
 .env
 gql-schema.temp.json
-.expo/*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/config.yml
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# from expo
+.expo/*
+npm-debug.*
+*.jks
+*.p12
+*.key
+*.mobileprovision

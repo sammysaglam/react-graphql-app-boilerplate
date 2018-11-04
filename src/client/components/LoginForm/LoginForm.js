@@ -109,9 +109,13 @@ class LoginForm extends React.PureComponent<
 					)}
 				</Mutation>
 				<UserSessionQuery>
-					{({
-						data: { currentUserSession: { isAdmin } = {} } = {},
-					} = {}) => <div>{isAdmin && 'is admin'}</div>}
+					{({ data: { currentUserSession } = {} } = {}) => (
+						<div>
+							{currentUserSession &&
+								currentUserSession.isAdmin &&
+								'is admin'}
+						</div>
+					)}
 				</UserSessionQuery>
 			</Wrapper>
 		);

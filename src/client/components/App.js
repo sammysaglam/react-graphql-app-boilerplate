@@ -1,11 +1,11 @@
 import React from 'react';
-import { injectGlobal } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 import LoginForm from './LoginForm/LoginForm';
 import LogoutButton from './LogoutButton/LogoutButton';
 
 // eslint-disable-next-line no-unused-expressions
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
 	* {
 		box-sizing: border-box;
 		padding: 0;
@@ -20,10 +20,13 @@ injectGlobal`
 `;
 
 const App = () => (
-	<div>
-		<LoginForm />
-		<LogoutButton />
-	</div>
+	<React.Fragment>
+		<GlobalStyle />
+		<div>
+			<LoginForm />
+			<LogoutButton />
+		</div>
+	</React.Fragment>
 );
 
 export default App;

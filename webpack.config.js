@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
@@ -16,6 +15,36 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 require('dotenv').config();
 
 const htmlGenerator = require('./src/client/index.html.js');
+
+const babelConfig = {
+	presets: [
+		[
+			'@babel/preset-env',
+			{
+				modules: false,
+				targets: {
+					node: 'current',
+				},
+			},
+		],
+		'@babel/preset-react',
+		'@babel/preset-flow',
+	],
+	plugins: [
+		'@babel/plugin-proposal-object-rest-spread',
+		'@babel/plugin-proposal-class-properties',
+		'babel-plugin-styled-components',
+	],
+	env: {
+		test: {
+			presets: [['@babel/preset-env'], '@babel/preset-react'],
+		},
+	},
+};
+const babelConfigWithReactHotloader = {
+	...babelConfig,
+	plugins: [...babelConfig.plugins, 'react-hot-loader/babel'],
+};
 
 module.exports = env => {
 	const { WEBPACKDEV_PORT, DEV_API_PORT } = process.env;
@@ -156,14 +185,6 @@ module.exports = env => {
 								assetNameRegExp: /\.(scss|css)$/g,
 							}),
 							new CleanWebpackPlugin('build/client'),
-							new UglifyJSPlugin({
-								uglifyOptions: {
-									compress: true,
-									output: {
-										comments: false,
-									},
-								},
-							}),
 					  ]
 					: []),
 			],
@@ -175,9 +196,14 @@ module.exports = env => {
 						use: {
 							loader: 'babel-loader',
 							options: isHotLoaderEnv
-								? { plugins: ['react-hot-loader/babel'] }
-								: {},
+								? babelConfigWithReactHotloader
+								: babelConfig,
 						},
+					},
+					{
+						test: /\.mjs$/,
+						include: /node_modules/,
+						type: 'javascript/auto',
 					},
 					{
 						test: /\.md/,
@@ -248,10 +274,13 @@ module.exports = env => {
 									exclude: /node_modules/,
 									use: {
 										loader: 'babel-loader',
-										options: {
-											plugins: ['static-fs'],
-										},
+										options: babelConfig,
 									},
+								},
+								{
+									test: /\.mjs$/,
+									include: /node_modules/,
+									type: 'javascript/auto',
 								},
 								{
 									test: /\.(png|jpg|jpeg|gif|ttf|woff|eot)$/,
@@ -278,17 +307,7 @@ module.exports = env => {
 								'process.env': 'process.env',
 							}),
 							...(isProduction
-								? [
-										new UglifyJSPlugin({
-											uglifyOptions: {
-												compress: true,
-												output: {
-													comments: false,
-												},
-											},
-										}),
-										new CleanWebpackPlugin('build/server'),
-								  ]
+								? [new CleanWebpackPlugin('build/server')]
 								: []),
 						],
 						resolve: {

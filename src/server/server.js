@@ -1,8 +1,8 @@
+const fs = require('fs');
+const path = require('path');
 const fetch = require('node-fetch');
 const { ApolloClient, InMemoryCache } = require('apollo-boost');
 const { createHttpLink } = require('apollo-link-http');
-const { readFileSync } = require('fs');
-const path = require('path');
 const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -15,10 +15,7 @@ const expressWs = require('express-ws')(express());
 const { app } = expressWs;
 const Cookies = require('cookies');
 
-const {
-	graphqlExpress,
-	graphiqlExpress,
-} = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 
 require('dotenv').config();
 
@@ -29,10 +26,9 @@ const {
 	USE_WEBPACKDEV_SERVER,
 } = process.env;
 
-const typeDefs = readFileSync(
-	path.join(__dirname, './schema.graphql'),
-	'utf-8',
-);
+const typeDefs = USE_WEBPACKDEV_SERVER
+	? fs.readFileSync(path.join(__dirname, './schema.graphql'), 'utf-8')
+	: require('./schema.graphql');
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
@@ -69,13 +65,16 @@ app.ws('/websocket', ws => {
 	});
 });
 
-// graphql
-app.use('/graphql', (req, res) =>
-	graphqlExpress(({ user }) => ({
-		schema,
-		context: { user, req, res },
-	}))(req, res),
-);
+const apolloServer = new ApolloServer({
+	schema,
+	context: ({ req, res }) => ({
+		user: req.user,
+		req,
+		res,
+	}),
+	playground: process.env.NODE_ENV !== 'production',
+});
+apolloServer.applyMiddleware({ app });
 
 // disable favicon
 // eslint-disable-next-line no-magic-numbers
@@ -83,8 +82,6 @@ app.get('/favicon.ico', (req, res) => res.send(''));
 app.get('/favicon.ico/', (req, res) => res.send(''));
 
 if (USE_WEBPACKDEV_SERVER === 'true') {
-	app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
-
 	// redirect to webpack-dev-server
 	app.all('/', (req, res) =>
 		res.redirect(`http://0.0.0.0:${WEBPACKDEV_PORT}`),

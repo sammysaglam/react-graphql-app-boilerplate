@@ -12,7 +12,7 @@ const Photo = styled.Image`
 `;
 
 // eslint-disable-next-line react/prefer-stateless-function
-export default class App extends React.Component {
+export class App extends React.Component {
 	render() {
 		return (
 			<View>
