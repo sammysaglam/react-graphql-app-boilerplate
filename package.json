@@ -3,11 +3,10 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "scripts": {
-    "start:mobile": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "start": "yarn gql-flow && USE_WEBPACKDEV_SERVER=true nodemon src/server/server.js --watch src/server --ext js,graphql & webpack-dev-server --hot --history-api-fallback --env.hot=true --open",
+    "start": "yarn gql-flow && USE_WEBPACKDEV_SERVER=true nodemon src/server/server.js --watch src/server --ext js,graphql & webpack-dev-server --hot --history-api-fallback --env.hot=true --open & expo start",
     "build": "yarn gql-flow && webpack --env.production=true",
     "analyze": "yarn gql-flow && webpack --env.analyze=true",
     "lint": "\"./node_modules/.bin/eslint\" .",
