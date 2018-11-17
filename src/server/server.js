@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
-const { ApolloClient, InMemoryCache } = require('apollo-boost');
+const { ApolloClient } = require('apollo-client');
+const { InMemoryCache } = require('apollo-cache-inmemory');
 const { createHttpLink } = require('apollo-link-http');
 const express = require('express');
 const helmet = require('helmet');

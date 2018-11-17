@@ -3,12 +3,10 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 
-import {
-	ApolloClient,
-	ApolloLink,
-	HttpLink,
-	InMemoryCache,
-} from 'apollo-boost';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloLink } from 'apollo-link';
 
 // import environment variables
 import { GRAPHQL_ENDPOINT, WEBSOCKETS_ENDPOINT } from './utils/env';
