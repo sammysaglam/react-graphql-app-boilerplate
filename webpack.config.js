@@ -142,13 +142,7 @@ module.exports = env => {
 				: {}),
 
 			entry: {
-				bundle: isHotLoaderEnv
-					? [
-							'react-hot-loader/patch',
-							'./src/client/entry.js',
-							'./src/client/entry.scss',
-					  ]
-					: ['./src/client/entry.js', './src/client/entry.scss'],
+				bundle: ['./src/client/entry.js', './src/client/entry.scss'],
 			},
 
 			output: {

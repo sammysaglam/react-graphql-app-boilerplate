@@ -1,4 +1,5 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import { createGlobalStyle } from 'styled-components';
 
 import LoginForm from './LoginForm/LoginForm';
@@ -19,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
 	}
 `;
 
-const App = () => (
+const App = hot(module)(() => (
 	<React.Fragment>
 		<GlobalStyle />
 		<div>
@@ -27,6 +28,6 @@ const App = () => (
 			<LogoutButton />
 		</div>
 	</React.Fragment>
-);
+));
 
 export default App;
