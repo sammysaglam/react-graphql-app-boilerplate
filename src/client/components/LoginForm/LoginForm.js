@@ -3,8 +3,8 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
-import { UserSessionQuery } from 'graphql/queries/getCurrentUserSession';
-import USER_SESSION_QUERY from 'graphql/queries/getCurrentUserSession/getCurrentUserSession.graphql';
+import { UserSessionQuery } from 'graphql/queries/GetCurrentUserSession';
+import USER_SESSION_QUERY from 'graphql/queries/GetCurrentUserSession/query.graphql';
 
 const Wrapper = styled.div`
 	padding: 3rem;

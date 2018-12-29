@@ -1,5 +1,5 @@
 # use node
-FROM node:10.1.0
+FROM node:11.4.0
 
 # set working directory
 WORKDIR /usr/src/app

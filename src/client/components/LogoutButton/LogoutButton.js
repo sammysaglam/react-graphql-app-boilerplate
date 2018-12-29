@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import USER_SESSION_QUERY from 'graphql/queries/getCurrentUserSession/getCurrentUserSession.graphql';
+import USER_SESSION_QUERY from 'graphql/queries/GetCurrentUserSession/query.graphql';
 
 const LOGOUT = gql`
 	mutation {

@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/app
     docker:
-      - image: circleci/node:10.1.0-browsers
+      - image: circleci/node:11.4.0-browsers
     steps:
       - checkout
 
@@ -20,6 +20,14 @@ jobs:
           command: yarn install
 
       - run:
+          name: Run linter
+          command: yarn lint
+
+      - run:
+          name: Run flow validation
+          command: yarn gql-flow && yarn flow
+
+      - run:
           name: Run tests
           command: yarn test
 
@@ -27,7 +35,7 @@ jobs:
           name: Build application
           command: yarn build
 
-  build_and_push_docker_image:
+  push-docker-image:
     working_directory: ~/app
     docker:
       - image: circleci/openjdk:8-jdk
@@ -43,11 +51,11 @@ jobs:
             sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
       - run:
-          name: "Log in to AWS ECR"
+          name: 'Log in to AWS ECR'
           command: eval $(aws ecr get-login --no-include-email --region eu-west-1)
 
       - run:
-          name: "Build & Push Docker Image"
+          name: 'Build & Push Docker Image'
           command: |
             docker build -t $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/react-graphql-app-boilerplate:latest -t $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/react-graphql-app-boilerplate:latest .
             docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/react-graphql-app-boilerplate:latest
@@ -55,7 +63,7 @@ jobs:
   deploy:
     working_directory: ~/app
     docker:
-      - image: circleci/node:10.1.0-browsers
+      - image: circleci/node:11.4.0-browsers
     steps:
       - checkout
 
@@ -73,14 +81,14 @@ jobs:
 
 workflows:
   version: 2
-  build_and_deploy:
+  build:
     jobs:
       - test
 
-      - build_and_push_docker_image:
+      - push-docker-image:
           requires:
             - test
-            
+
           filters:
             branches:
               only:
@@ -90,7 +98,7 @@ workflows:
       - deploy:
           requires:
             - test
-            - build_and_push_docker_image
+            - push-docker-image
 
           filters:
             branches:

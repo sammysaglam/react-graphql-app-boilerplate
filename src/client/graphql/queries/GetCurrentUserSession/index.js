@@ -4,8 +4,8 @@ import type { QueryRenderPropFunction } from 'react-apollo';
 import { Query } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import USER_SESSION_QUERY from './getCurrentUserSession.graphql';
-import type { getCurrentUserSession as CurrentUserSessionData } from './__generated__/getCurrentUserSession';
+import QUERY from './query.graphql';
+import type { GetCurrentUserSession as CurrentUserSessionData } from './__generated__/GetCurrentUserSession';
 
 type UserSessionQueryPropsType = {
 	children: QueryRenderPropFunction<CurrentUserSessionData, void>,
@@ -14,7 +14,7 @@ type UserSessionQueryPropsType = {
 export const UserSessionQuery = ({
 	children,
 }: UserSessionQueryPropsType) => (
-	<Query query={USER_SESSION_QUERY}>{children}</Query>
+	<Query query={QUERY}>{children}</Query>
 );
 
 UserSessionQuery.propTypes = {

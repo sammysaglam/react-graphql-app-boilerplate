@@ -13,6 +13,8 @@
 
 [options]
 module.name_mapper='^graphql/queries' ->'<PROJECT_ROOT>/src/client/graphql/queries'
+module.name_mapper='^graphql/mutations' ->'<PROJECT_ROOT>/src/client/graphql/mutations'
+module.name_mapper='^graphql/subscriptions' ->'<PROJECT_ROOT>/src/client/graphql/subscriptions'
 module.name_mapper='.*\(.graphql\)$' -> 'empty/object'
 module.name_mapper='.*\(.gql\)$' -> 'empty/object'
 

@@ -1,4 +1,4 @@
-query getCurrentUserSession {
+query GetCurrentUserSession {
 	currentUserSession {
 		email
 		isGuest

@@ -21,13 +21,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App = hot(module)(() => (
-	<React.Fragment>
+	<>
 		<GlobalStyle />
 		<div>
 			<LoginForm />
 			<LogoutButton />
 		</div>
-	</React.Fragment>
+	</>
 ));
 
 export default App;

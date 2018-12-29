@@ -5,18 +5,18 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getCurrentUserSession
+// GraphQL query operation: GetCurrentUserSession
 // ====================================================
 
-export type getCurrentUserSession_currentUserSession = {|
+export type GetCurrentUserSession_currentUserSession = {|
   __typename: "UserSession",
   email: ?string,
   isGuest: ?boolean,
   isAdmin: ?boolean,
 |};
 
-export type getCurrentUserSession = {|
-  currentUserSession: getCurrentUserSession_currentUserSession
+export type GetCurrentUserSession = {|
+  currentUserSession: GetCurrentUserSession_currentUserSession
 |};
 
 /* @flow */
