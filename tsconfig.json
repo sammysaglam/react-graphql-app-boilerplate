@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"allowJs": false,
+		"allowSyntheticDefaultImports": true,
+		"noFallthroughCasesInSwitch": true,
+		"experimentalDecorators": true,
+		"esModuleInterop": true,
+		"isolatedModules": false,
+		"jsx": "react-native",
+		"lib": ["es6", "dom"],
+		"moduleResolution": "node",
+		"noEmit": true,
+		"strict": true,
+		"target": "esnext",
+		"plugins": [{ "transform": "ts-optchain/transform" }]
+	},
+	"exclude": ["node_modules"]
+}

@@ -1,0 +1,16 @@
+type Query {
+	currentAuthSession: CurrentAuthSession
+}
+
+type Mutation {
+	login(email: String!, password: String!): CurrentAuthSession
+}
+
+type CurrentAuthSession {
+	user: User
+}
+
+type User {
+	email: String
+	isAdmin: Boolean
+}

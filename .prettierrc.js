@@ -1,6 +1,1 @@
-module.exports = {
-	printWidth: 70,
-	useTabs: true,
-	singleQuote: true,
-	trailingComma: 'all',
-};
+module.exports = require('eslint-sammy-preset/.prettierrc.recommended.js');

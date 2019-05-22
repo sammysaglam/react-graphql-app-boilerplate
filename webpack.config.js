@@ -1,108 +1,71 @@
+require('dotenv').config();
+
 const path = require('path');
 const webpack = require('webpack');
-const nodeExternals = require('webpack-node-externals');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HTMLMinifier = require('html-minifier');
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
+const jsonminify = require('jsonminify');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const HTMLMinifier = require('html-minifier');
-const jsonminify = require('jsonminify');
-const DotenvWebpackPlugin = require('dotenv-webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
 
-require('dotenv').config();
+const babelConfig = require('./babel.config.web-app');
 
-const htmlGenerator = require('./src/client/index.html.js');
-
-const babelConfig = {
-	presets: [
+const copyFiles = ({ isProduction }) =>
+	new CopyWebpackPlugin(
 		[
-			'@babel/preset-env',
 			{
-				modules: false,
-				targets: {
-					node: 'current',
+				from: {
+					glob: '**/*.+(html|json|png|svg|jpg|jpeg|gif|ttf|woff|eot)',
+				},
+				context: 'src/client',
+				to: './[path]/[name].[ext]',
+				transform: (fileContents, filepath) => {
+					if (!isProduction) return fileContents;
+
+					// get file extension
+					const fileExt = filepath
+						.split('.')
+						.pop()
+						.toLowerCase();
+
+					// minify HTML
+					switch (fileExt) {
+						case 'html':
+							return HTMLMinifier.minify(fileContents.toString(), {
+								collapseWhitespace: true,
+								collapseInlineTagWhitespace: true,
+								minifyCSS: true,
+								minifyJS: true,
+								removeComments: true,
+								removeRedundantAttributes: true,
+							});
+						case 'json':
+							return jsonminify(fileContents.toString());
+
+						default:
+							return fileContents;
+					}
 				},
 			},
 		],
-		'@babel/preset-react',
-		'@babel/preset-flow',
-	],
-	plugins: [
-		'@babel/plugin-proposal-object-rest-spread',
-		'@babel/plugin-proposal-class-properties',
-		'babel-plugin-styled-components',
-	],
-	env: {
-		test: {
-			presets: [['@babel/preset-env'], '@babel/preset-react'],
+		{
+			ignore: [{ glob: '**/_*/**' }, { glob: '**/_*' }, 'index.html'],
 		},
-	},
-};
-const babelConfigWithReactHotloader = {
-	...babelConfig,
-	plugins: [...babelConfig.plugins, 'react-hot-loader/babel'],
-};
+	);
+
+const { htmlGenerator } = require('./src/web-app/client/index.html.js');
 
 module.exports = env => {
 	const { WEBPACKDEV_PORT, DEV_API_PORT } = process.env;
 
-	const copyFiles = ({ isProduction }) =>
-		new CopyWebpackPlugin(
-			[
-				{
-					from: {
-						glob:
-							'**/*.+(html|json|png|svg|jpg|jpeg|gif|ttf|woff|eot)',
-					},
-					context: 'src/client',
-					to: './[path]/[name].[ext]',
-					transform: (fileContents, filepath) => {
-						if (!isProduction) return fileContents;
-
-						// get file extension
-						const fileExt = filepath
-							.split('.')
-							.pop()
-							.toLowerCase();
-
-						// minify HTML
-						switch (fileExt) {
-							case 'html':
-								return HTMLMinifier.minify(fileContents.toString(), {
-									collapseWhitespace: true,
-									collapseInlineTagWhitespace: true,
-									minifyCSS: true,
-									minifyJS: true,
-									removeComments: true,
-									removeRedundantAttributes: true,
-								});
-							case 'json':
-								return jsonminify(fileContents.toString());
-
-							default:
-								return fileContents;
-						}
-					},
-				},
-			],
-			{
-				ignore: [
-					{ glob: '**/_*/**' },
-					{ glob: '**/_*' },
-					'index.html',
-				],
-			},
-		);
-
 	const analyzeBuild = env && env.analyze === 'true';
 	const isHotLoaderEnv = !analyzeBuild && env && env.hot === 'true';
-
 	const isProduction =
-		analyzeBuild ||
-		(!isHotLoaderEnv && env && env.production === 'true');
+		analyzeBuild || (!isHotLoaderEnv && env && env.production === 'true');
 
 	return [
 		{
@@ -113,8 +76,9 @@ module.exports = env => {
 			...(isHotLoaderEnv
 				? {
 						devServer: {
+							historyApiFallback: true,
+							hot: true,
 							contentBase: path.join(__dirname, 'build/client'),
-							hotOnly: true,
 							compress: true,
 							port: WEBPACKDEV_PORT,
 							host: '0.0.0.0',
@@ -129,9 +93,6 @@ module.exports = env => {
 								'/graphql/*': {
 									target: 'http://0.0.0.0:' + DEV_API_PORT,
 								},
-								'/graphiql/*': {
-									target: 'http://0.0.0.0:' + DEV_API_PORT,
-								},
 								'/websocket/*': {
 									target: 'http://0.0.0.0:' + DEV_API_PORT,
 									ws: true,
@@ -142,9 +103,12 @@ module.exports = env => {
 				: {}),
 
 			entry: {
-				bundle: ['./src/client/entry.js', './src/client/entry.scss'],
+				bundle: [
+					'react-hot-loader/patch',
+					'./src/web-app/client/entry.tsx',
+					'./src/web-app/client/entry.scss',
+				],
 			},
-
 			output: {
 				path: path.join(__dirname, 'build/client'),
 				filename: '[name].js',
@@ -152,15 +116,10 @@ module.exports = env => {
 			},
 
 			plugins: [
-				new DotenvWebpackPlugin(),
 				copyFiles({ isProduction }),
-				new webpack.DefinePlugin({
-					'process.env': {
-						USE_WEBPACKDEV_SERVER: isHotLoaderEnv
-							? `'true'`
-							: `'false'`,
-					},
-				}),
+
+				...(analyzeBuild ? [new BundleAnalyzerPlugin()] : []),
+
 				...(isHotLoaderEnv
 					? [
 							new GenerateAssetPlugin({
@@ -171,43 +130,40 @@ module.exports = env => {
 							}),
 					  ]
 					: []),
-				...(analyzeBuild ? [new BundleAnalyzerPlugin()] : []),
+
 				...(isProduction
 					? [
 							new ImageminPlugin(),
 							new OptimizeCssAssetsPlugin({
 								assetNameRegExp: /\.(scss|css)$/g,
 							}),
-							new CleanWebpackPlugin('build/client'),
+							new CleanWebpackPlugin({
+								cleanOnceBeforeBuildPatterns: 'build/client',
+							}),
 					  ]
 					: []),
+
+				new webpack.DefinePlugin({
+					'process.env.USE_WEBPACKDEV_SERVER': isHotLoaderEnv
+						? '"true"'
+						: '"false"',
+				}),
 			],
+
 			module: {
 				rules: [
 					{
-						test: /\.js$/,
+						test: /\.(js|jsx|ts|tsx)$/,
 						exclude: /node_modules/,
 						use: {
 							loader: 'babel-loader',
-							options: isHotLoaderEnv
-								? babelConfigWithReactHotloader
-								: babelConfig,
+							options: babelConfig,
 						},
 					},
 					{
 						test: /\.mjs$/,
 						include: /node_modules/,
 						type: 'javascript/auto',
-					},
-					{
-						test: /\.md/,
-						exclude: /node_modules/,
-						use: [
-							{
-								loader: 'babel-loader',
-							},
-							'axe-markdown-loader',
-						],
 					},
 					{
 						test: /\.(png|jpg|jpeg|gif|ttf|woff|eot)$/,
@@ -231,21 +187,11 @@ module.exports = env => {
 					},
 				],
 			},
+
 			resolve: {
+				extensions: ['.ts', '.js', '.jsx', '.tsx'],
 				alias: {
-					'prop-types$': path.resolve('node_modules/axe-prop-types'),
-					'graphql/queries': path.join(
-						__dirname,
-						'src/client/graphql/queries',
-					),
-					'graphql/mutations': path.join(
-						__dirname,
-						'src/client/graphql/mutations',
-					),
-					'graphql/subscriptions': path.join(
-						__dirname,
-						'src/client/graphql/subscriptions',
-					),
+					'react-dom': '@hot-loader/react-dom',
 				},
 			},
 		},
@@ -255,7 +201,7 @@ module.exports = env => {
 			? [
 					{
 						mode: isProduction ? 'production' : 'development',
-						entry: './src/server/server.js',
+						entry: './src/web-app/server/server',
 						output: {
 							path: path.resolve(__dirname, 'build/server'),
 							filename: 'server.js',
@@ -264,11 +210,17 @@ module.exports = env => {
 						module: {
 							rules: [
 								{
-									test: /\.js$/,
+									test: /\.(js|jsx|ts|tsx)$/,
 									exclude: /node_modules/,
 									use: {
 										loader: 'babel-loader',
-										options: babelConfig,
+										options: {
+											...babelConfig,
+											plugins: [
+												...babelConfig.plugins,
+												'babel-plugin-static-fs',
+											],
+										},
 									},
 								},
 								{
@@ -282,6 +234,11 @@ module.exports = env => {
 									exclude: /node_modules/,
 								},
 								{
+									test: /\.(svg)$/,
+									loader: 'svg-react-loader',
+									exclude: /node_modules/,
+								},
+								{
 									test: /\.(graphql|gql)$/,
 									exclude: /node_modules/,
 									loader: 'graphql-tag/loader',
@@ -289,36 +246,23 @@ module.exports = env => {
 							],
 						},
 						target: 'node',
-						externals: nodeExternals({
-							whitelist: [
-								/graphql\/queries/,
-								/graphql\/mutations/,
-								/graphql\/subscriptions/,
-							],
-						}),
 						plugins: [
 							new webpack.DefinePlugin({
 								'process.env': 'process.env',
 							}),
 							...(isProduction
-								? [new CleanWebpackPlugin('build/server')]
+								? [
+										new CleanWebpackPlugin({
+											cleanOnceBeforeBuildPatterns: 'build/server',
+										}),
+								  ]
 								: []),
 						],
 						resolve: {
-							alias: {
-								'graphql/queries': path.join(
-									__dirname,
-									'src/client/graphql/queries',
-								),
-								'graphql/mutations': path.join(
-									__dirname,
-									'src/client/graphql/mutations',
-								),
-								'graphql/subscriptions': path.join(
-									__dirname,
-									'src/client/graphql/subscriptions',
-								),
-							},
+							extensions: ['.ts', '.js', '.jsx', '.tsx'],
+						},
+						optimization: {
+							minimize: false,
 						},
 					},
 			  ]

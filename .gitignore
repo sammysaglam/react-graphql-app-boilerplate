@@ -1,22 +1,9 @@
-node_modules/
-build
-.idea/workspace.xml
-.idea/tasks.xml
-yarn-error.log
-coverage
-.env
-gql-schema.temp.json
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/config.yml
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-
-# from expo
+node_modules/**/*
 .expo/*
 npm-debug.*
 *.jks
 *.p12
 *.key
 *.mobileprovision
+yarn-error.log
+build/

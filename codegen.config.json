@@ -1,0 +1,34 @@
+{
+	"schema": "./src/web-app/server/schema.graphql",
+	"documents": [
+		"./src/web-app/client/**/*.graphql",
+		"./src/web-app/client/**/*.gql"
+	],
+	"generates": {
+		"./src/web-app/server/schema.types.ts": {
+			"plugins": [
+				{ "add": "/* eslint-disable */" },
+				"typescript",
+				"typescript-operations",
+				"typescript-resolvers"
+			]
+		},
+		"./src/web-app/client/gql-modules.d.ts": {
+			"plugins": [
+				{ "add": "/* eslint-disable */" },
+				"typescript-graphql-files-modules"
+			]
+		},
+		"./src/web-app/client/types.react-apollo.tsx": {
+			"plugins": [
+				{ "add": "/* eslint-disable */" },
+				"typescript",
+				"typescript-operations",
+				"typescript-react-apollo"
+			],
+			"config": {
+				"withHOC": false
+			}
+		}
+	}
+}

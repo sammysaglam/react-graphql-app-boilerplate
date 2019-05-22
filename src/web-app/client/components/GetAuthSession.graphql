@@ -1,0 +1,8 @@
+query GetAuthSession {
+	currentAuthSession {
+		user {
+			email
+			isAdmin
+		}
+	}
+}
