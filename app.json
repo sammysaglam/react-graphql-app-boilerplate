@@ -1,10 +1,10 @@
 {
 	"expo": {
-		"name": "retail-site",
-		"slug": "retail-site",
+		"name": "react-graphql-app-boilerplate",
+		"slug": "react-graphql-app-boilerplate",
 		"privacy": "public",
-		"sdkVersion": "32.0.0",
-		"platforms": ["ios", "android"],
+		"sdkVersion": "33.0.0",
+		"platforms": ["ios", "android", "web"],
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
