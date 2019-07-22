@@ -33,5 +33,5 @@ class App extends React.Component {
 	}
 }
 
-const Enhanced = hot(App);
-export { Enhanced as App };
+const HotApp = hot(App);
+export { HotApp, App };

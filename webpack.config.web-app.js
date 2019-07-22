@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const path = require('path');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HTMLMinifier = require('html-minifier');
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
@@ -207,6 +207,18 @@ module.exports = env => {
 							filename: 'server.js',
 							publicPath: '/',
 						},
+						plugins: [
+							new webpack.DefinePlugin({
+								'process.env.USE_WEBPACKDEV_SERVER': '"false"',
+							}),
+							...(isProduction
+								? [
+										new CleanWebpackPlugin({
+											cleanOnceBeforeBuildPatterns: 'build/server',
+										}),
+								  ]
+								: []),
+						],
 						module: {
 							rules: [
 								{
@@ -246,18 +258,6 @@ module.exports = env => {
 							],
 						},
 						target: 'node',
-						plugins: [
-							new webpack.DefinePlugin({
-								'process.env': 'process.env',
-							}),
-							...(isProduction
-								? [
-										new CleanWebpackPlugin({
-											cleanOnceBeforeBuildPatterns: 'build/server',
-										}),
-								  ]
-								: []),
-						],
 						resolve: {
 							extensions: ['.ts', '.js', '.jsx', '.tsx'],
 						},

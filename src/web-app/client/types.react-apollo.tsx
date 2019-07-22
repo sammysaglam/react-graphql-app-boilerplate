@@ -59,12 +59,9 @@ export const GetAuthSessionDocument = gql`
 	}
 `;
 export type GetAuthSessionComponentProps = Omit<
-	Omit<
-		ReactApollo.QueryProps<GetAuthSessionQuery, GetAuthSessionQueryVariables>,
-		'query'
-	>,
-	'variables'
-> & { variables?: GetAuthSessionQueryVariables };
+	ReactApollo.QueryProps<GetAuthSessionQuery, GetAuthSessionQueryVariables>,
+	'query'
+>;
 
 export const GetAuthSessionComponent = (
 	props: GetAuthSessionComponentProps,

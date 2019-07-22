@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
 	ID: string;
@@ -45,6 +44,8 @@ export type GetAuthSessionQuery = { __typename?: 'Query' } & {
 		}
 	>;
 };
+
+export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
 	parent: TParent,
@@ -115,6 +116,16 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+	Query: ResolverTypeWrapper<{}>;
+	CurrentAuthSession: ResolverTypeWrapper<CurrentAuthSession>;
+	User: ResolverTypeWrapper<User>;
+	String: ResolverTypeWrapper<Scalars['String']>;
+	Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+	Mutation: ResolverTypeWrapper<{}>;
+};
+
+/** Mapping between all available schema types and the resolvers parents */
+export type ResolversParentTypes = {
 	Query: {};
 	CurrentAuthSession: CurrentAuthSession;
 	User: User;
@@ -125,14 +136,14 @@ export type ResolversTypes = {
 
 export type CurrentAuthSessionResolvers<
 	ContextType = any,
-	ParentType = ResolversTypes['CurrentAuthSession']
+	ParentType = ResolversParentTypes['CurrentAuthSession']
 > = {
 	user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type MutationResolvers<
 	ContextType = any,
-	ParentType = ResolversTypes['Mutation']
+	ParentType = ResolversParentTypes['Mutation']
 > = {
 	login?: Resolver<
 		Maybe<ResolversTypes['CurrentAuthSession']>,
@@ -144,7 +155,7 @@ export type MutationResolvers<
 
 export type QueryResolvers<
 	ContextType = any,
-	ParentType = ResolversTypes['Query']
+	ParentType = ResolversParentTypes['Query']
 > = {
 	currentAuthSession?: Resolver<
 		Maybe<ResolversTypes['CurrentAuthSession']>,
@@ -155,7 +166,7 @@ export type QueryResolvers<
 
 export type UserResolvers<
 	ContextType = any,
-	ParentType = ResolversTypes['User']
+	ParentType = ResolversParentTypes['User']
 > = {
 	email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 	isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;

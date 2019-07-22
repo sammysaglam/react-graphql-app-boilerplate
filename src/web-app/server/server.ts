@@ -13,13 +13,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { SchemaLink } from 'apollo-link-schema';
 import { Context } from './types';
 
-const {
-	DEV_API_PORT,
-	JWT_SECRET,
-	USE_WEBPACKDEV_SERVER,
-	WEBPACKDEV_PORT,
-} = process.env;
-
 const app = express();
 
 app.use((req, res, next) => {
@@ -33,7 +26,7 @@ app.use(
 	cors(),
 	bodyParser.json(),
 	expressJwt({
-		secret: JWT_SECRET ? JWT_SECRET : '',
+		secret: process.env.JWT_SECRET ? process.env.JWT_SECRET : '',
 		credentialsRequired: false,
 		getToken: req => {
 			if (
@@ -49,9 +42,10 @@ app.use(
 );
 
 // apollo server
-if (USE_WEBPACKDEV_SERVER === 'true') {
+if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 	require('graphql-import-node/register');
 }
+
 const schema = makeExecutableSchema({
 	typeDefs: require('../../../build/schema/schema.graphql'),
 	resolvers: resolvers as any,
@@ -66,15 +60,15 @@ const apolloServer = new ApolloServer({
 apolloServer.applyMiddleware({ app });
 
 // serve app
-if (USE_WEBPACKDEV_SERVER === 'true') {
+if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 	// redirect to webpack-dev-server
 	app.all('/', (req, res) =>
-		res.redirect(`http://localhost:${WEBPACKDEV_PORT}`),
+		res.redirect(`http://localhost:${process.env.WEBPACKDEV_PORT}`),
 	);
 
-	app.listen(DEV_API_PORT, () =>
+	app.listen(process.env.DEV_API_PORT, () =>
 		// eslint-disable-next-line no-console
-		console.log(`API running on port ${DEV_API_PORT}`),
+		console.log(`API running on port ${process.env.DEV_API_PORT}`),
 	);
 } else {
 	app.use(compression());

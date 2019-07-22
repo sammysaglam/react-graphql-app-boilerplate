@@ -8,10 +8,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { ApolloProvider } from 'react-apollo';
 
-import { App } from './components/App';
+import { App, HotApp } from './components/App';
 
 // import environment variables
 import { GRAPHQL_ENDPOINT } from './utils/env';
+
+const AppToRender = process.env.USE_WEBPACKDEV_SERVER === 'true' ? HotApp : App;
 
 // setup apollo client
 const authLink = new ApolloLink((operation, forward) =>
@@ -46,10 +48,10 @@ const render = (Component: any) => {
 		ReactDOM.hydrate(renderResult, document.getElementById('app'));
 	}
 };
-render(App);
+render(AppToRender);
 
 if (module.hot) {
 	module.hot.accept('./components/App', () => {
-		render(App);
+		render(AppToRender);
 	});
 }
