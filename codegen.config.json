@@ -27,7 +27,9 @@
 				"typescript-react-apollo"
 			],
 			"config": {
-				"withHOC": false
+				"withHOC": false,
+				"withHooks": true,
+				"hooksImportFrom": "react-apollo"
 			}
 		}
 	}

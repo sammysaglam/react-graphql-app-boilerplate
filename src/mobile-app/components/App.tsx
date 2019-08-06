@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 import styled from 'styled-components/native';
+import { IntlProvider, FormattedMessage } from 'react-intl';
 
 const Wrapper = styled.View`
 	flex: 1;
@@ -9,14 +10,16 @@ const Wrapper = styled.View`
 	justify-content: center;
 `;
 
-/* eslint-disable react-intl/string-is-marked-for-translation */
-// eslint-disable-next-line react/prefer-stateless-function
-export class App extends React.Component {
-	render() {
-		return (
-			<Wrapper>
-				<Text>Open up App.js to start working on your app!</Text>
-			</Wrapper>
-		);
-	}
-}
+export const App = () => (
+	<IntlProvider locale="en" textComponent={Text}>
+		<Wrapper>
+			<Text>
+				<FormattedMessage
+					defaultMessage="hello world!"
+					description="hello world!"
+					id="demo.welcome"
+				/>
+			</Text>
+		</Wrapper>
+	</IntlProvider>
+);

@@ -5,25 +5,31 @@ const npmRun = require('npm-run');
 const { importSchema } = require('graphql-import');
 
 /* eslint-disable no-console */
-npmRun.exec('graphql-codegen --config ./codegen.config.json', error => {
-	if (error) {
-		console.error('GraphQL Codegen error');
-		console.error(error);
-		return;
-	}
-	console.log('Generated GraphQL types');
+npmRun.exec(
+	'graphql-codegen --config ./codegen.config.json',
+	(error, stdout, stderr) => {
+		if (error) {
+			console.log(stdout);
+			console.log(stderr);
+			console.error('GraphQL Codegen error');
+			console.error(error);
+			return;
+		}
+		console.log(stdout);
+		console.log('Generated GraphQL types');
 
-	mkdirp(path.join(__dirname, '../build/schema'), () => {
-		const schema = importSchema(
-			path.join(__dirname, '../src/web-app/server/schema.graphql'),
-		);
+		mkdirp(path.join(__dirname, '../build/schema'), () => {
+			const schema = importSchema(
+				path.join(__dirname, '../src/web-app/server/schema.graphql'),
+			);
 
-		fs.writeFile(
-			path.join(__dirname, '../build/schema/schema.graphql'),
-			schema,
-			() => {
-				console.log('GraphQL schema built');
-			},
-		);
-	});
-});
+			fs.writeFile(
+				path.join(__dirname, '../build/schema/schema.graphql'),
+				schema,
+				() => {
+					console.log('GraphQL schema built');
+				},
+			);
+		});
+	},
+);

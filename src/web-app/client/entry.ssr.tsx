@@ -1,7 +1,8 @@
 import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import { ServerStyleSheet } from 'styled-components';
-import { ApolloProvider, renderToStringWithData } from 'react-apollo';
+import { renderToStringWithData } from '@apollo/react-ssr';
+import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 
 import { App } from './components/App';

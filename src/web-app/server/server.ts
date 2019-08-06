@@ -1,4 +1,5 @@
 import './utils/load-env-vars';
+import { JWT, ENV, DEV_TOOLS } from './utils/config';
 import express from 'express';
 import compression from 'compression';
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express';
@@ -26,7 +27,7 @@ app.use(
 	cors(),
 	bodyParser.json(),
 	expressJwt({
-		secret: process.env.JWT_SECRET ? process.env.JWT_SECRET : '',
+		secret: JWT.SECRET ? JWT.SECRET : '',
 		credentialsRequired: false,
 		getToken: req => {
 			if (
@@ -56,6 +57,13 @@ const apolloServer = new ApolloServer({
 		cookies: req.cookies,
 		user: req.user,
 	}),
+	introspection: DEV_TOOLS.GRAPHQL_PLAYGROUND_ENABLED,
+	playground: DEV_TOOLS.GRAPHQL_PLAYGROUND_ENABLED
+		? {
+				version: '1.7.30',
+				settings: { 'request.credentials': 'include' },
+		  }
+		: false,
 });
 apolloServer.applyMiddleware({ app });
 
@@ -63,12 +71,12 @@ apolloServer.applyMiddleware({ app });
 if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 	// redirect to webpack-dev-server
 	app.all('/', (req, res) =>
-		res.redirect(`http://localhost:${process.env.WEBPACKDEV_PORT}`),
+		res.redirect(`http://localhost:${ENV.WEBPACKDEV_PORT}`),
 	);
 
-	app.listen(process.env.DEV_API_PORT, () =>
+	app.listen(ENV.DEV_API_PORT, () =>
 		// eslint-disable-next-line no-console
-		console.log(`API running on port ${process.env.DEV_API_PORT}`),
+		console.log(`API running on port ${ENV.DEV_API_PORT}`),
 	);
 } else {
 	app.use(compression());

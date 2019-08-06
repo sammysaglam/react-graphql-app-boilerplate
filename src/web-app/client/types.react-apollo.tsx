@@ -2,6 +2,7 @@
 import gql from 'graphql-tag';
 import * as React from 'react';
 import * as ReactApollo from 'react-apollo';
+import * as ReactApolloHooks from 'react-apollo';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -15,6 +16,7 @@ export type Scalars = {
 
 export type CurrentAuthSession = {
 	__typename?: 'CurrentAuthSession';
+	id: Scalars['ID'];
 	user?: Maybe<User>;
 };
 
@@ -42,15 +44,16 @@ export type GetAuthSessionQueryVariables = {};
 
 export type GetAuthSessionQuery = { __typename?: 'Query' } & {
 	currentAuthSession: Maybe<
-		{ __typename?: 'CurrentAuthSession' } & {
-			user: Maybe<{ __typename?: 'User' } & Pick<User, 'email' | 'isAdmin'>>;
-		}
+		{ __typename?: 'CurrentAuthSession' } & Pick<CurrentAuthSession, 'id'> & {
+				user: Maybe<{ __typename?: 'User' } & Pick<User, 'email' | 'isAdmin'>>;
+			}
 	>;
 };
 
 export const GetAuthSessionDocument = gql`
 	query GetAuthSession {
 		currentAuthSession {
+			id
 			user {
 				email
 				isAdmin
@@ -71,3 +74,15 @@ export const GetAuthSessionComponent = (
 		{...props}
 	/>
 );
+
+export function useGetAuthSessionQuery(
+	baseOptions?: ReactApolloHooks.QueryHookOptions<GetAuthSessionQueryVariables>,
+) {
+	return ReactApolloHooks.useQuery<
+		GetAuthSessionQuery,
+		GetAuthSessionQueryVariables
+	>(GetAuthSessionDocument, baseOptions);
+}
+export type GetAuthSessionQueryHookResult = ReturnType<
+	typeof useGetAuthSessionQuery
+>;

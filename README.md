@@ -1,2 +1,1 @@
-# Retail Site
-
+# React GraphQL App Boilerplate

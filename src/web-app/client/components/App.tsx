@@ -1,37 +1,54 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root';
-import styled from 'styled-components';
-import { GetAuthSessionComponent } from '../types.react-apollo';
+import styled, { ThemeProvider } from 'styled-components';
+import { IntlProvider, FormattedMessage } from 'react-intl';
+
+import { InjectIntlProvider } from './utils/useIntl';
+import { theme as appTheme, GlobalStyle } from '../theme/theme';
+import { useGetAuthSessionQuery } from '../types.react-apollo';
 
 const Wrapper = styled.div`
 	flex: 1;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.secondary};
 	align-items: center;
 	justify-content: center;
+	color: ${({ theme }) => theme.colors.primary};
 `;
 
-/* eslint-disable react-intl/string-is-marked-for-translation */
-// eslint-disable-next-line react/prefer-stateless-function
-class App extends React.Component {
-	render() {
-		return (
-			<Wrapper>
-				<GetAuthSessionComponent>
-					{({ data }) => (
-						<span>
-							Open{' '}
-							{data &&
-								data.currentAuthSession &&
-								data.currentAuthSession.user &&
-								data.currentAuthSession.user.email}{' '}
-							up App.js to start working on your app!
-						</span>
-					)}
-				</GetAuthSessionComponent>
-			</Wrapper>
-		);
-	}
-}
+const App = () => {
+	const { data } = useGetAuthSessionQuery();
+
+	return (
+		<ThemeProvider theme={appTheme}>
+			<IntlProvider locale="en">
+				<InjectIntlProvider>
+					<>
+						<GlobalStyle />
+						<Wrapper>
+							<FormattedMessage
+								defaultMessage="hello {email}"
+								description="hello world"
+								id="demo.hello"
+								values={{
+									email: (data &&
+										data.currentAuthSession &&
+										data.currentAuthSession.user &&
+										data.currentAuthSession.user.email) || (
+										<FormattedMessage
+											defaultMessage="guest"
+											description="guest"
+											id="demo.guest"
+										/>
+									),
+								}}
+							/>
+						</Wrapper>
+					</>
+				</InjectIntlProvider>
+			</IntlProvider>
+		</ThemeProvider>
+	);
+};
 
 const HotApp = hot(App);
 export { HotApp, App };

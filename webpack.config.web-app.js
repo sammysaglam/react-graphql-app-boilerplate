@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HTMLMinifier = require('html-minifier');
+const nodeExternals = require('webpack-node-externals');
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
 const jsonminify = require('jsonminify');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
@@ -258,12 +259,16 @@ module.exports = env => {
 							],
 						},
 						target: 'node',
+						node: {
+							__dirname: true,
+						},
 						resolve: {
 							extensions: ['.ts', '.js', '.jsx', '.tsx'],
 						},
 						optimization: {
 							minimize: false,
 						},
+						externals: [nodeExternals()],
 					},
 			  ]
 			: []),

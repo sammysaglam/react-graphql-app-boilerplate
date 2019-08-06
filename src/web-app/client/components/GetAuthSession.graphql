@@ -1,5 +1,6 @@
 query GetAuthSession {
 	currentAuthSession {
+		id
 		user {
 			email
 			isAdmin

@@ -12,6 +12,7 @@ export type Scalars = {
 
 export type CurrentAuthSession = {
 	__typename?: 'CurrentAuthSession';
+	id: Scalars['ID'];
 	user?: Maybe<User>;
 };
 
@@ -39,9 +40,9 @@ export type GetAuthSessionQueryVariables = {};
 
 export type GetAuthSessionQuery = { __typename?: 'Query' } & {
 	currentAuthSession: Maybe<
-		{ __typename?: 'CurrentAuthSession' } & {
-			user: Maybe<{ __typename?: 'User' } & Pick<User, 'email' | 'isAdmin'>>;
-		}
+		{ __typename?: 'CurrentAuthSession' } & Pick<CurrentAuthSession, 'id'> & {
+				user: Maybe<{ __typename?: 'User' } & Pick<User, 'email' | 'isAdmin'>>;
+			}
 	>;
 };
 
@@ -118,6 +119,7 @@ export type DirectiveResolverFn<
 export type ResolversTypes = {
 	Query: ResolverTypeWrapper<{}>;
 	CurrentAuthSession: ResolverTypeWrapper<CurrentAuthSession>;
+	ID: ResolverTypeWrapper<Scalars['ID']>;
 	User: ResolverTypeWrapper<User>;
 	String: ResolverTypeWrapper<Scalars['String']>;
 	Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -128,6 +130,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
 	Query: {};
 	CurrentAuthSession: CurrentAuthSession;
+	ID: Scalars['ID'];
 	User: User;
 	String: Scalars['String'];
 	Boolean: Scalars['Boolean'];
@@ -138,6 +141,7 @@ export type CurrentAuthSessionResolvers<
 	ContextType = any,
 	ParentType = ResolversParentTypes['CurrentAuthSession']
 > = {
+	id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 	user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 

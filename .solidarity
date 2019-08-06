@@ -1,0 +1,32 @@
+{
+	"$schema": "http://json.schemastore.org/solidaritySchema",
+	"config": {
+		"output": "verbose"
+	},
+	"requirements": {
+		"Node": [
+			{
+				"rule": "cli",
+				"binary": "node",
+				"semver": "12.2.0",
+				"error": "You have node@{{installedVersion}}, and need node@{{wantedVersion}}. Fix with `nvm install {{wantedVersion}} && nvm use`"
+			}
+		],
+		"Yarn": [
+			{
+				"rule": "cli",
+				"binary": "yarn",
+				"semver": "1.15.2",
+				"error": "You have yarn@{{installedVersion}}, and need yarn@{{wantedVersion}}. Fix with `npm install -g yarn@{{wantedVersion}}`"
+			}
+		],
+		"NPM": [
+			{
+				"rule": "cli",
+				"binary": "npm",
+				"semver": "6.9.0",
+				"error": "You have npm@{{installedVersion}}, and need npm@{{wantedVersion}}."
+			}
+		]
+	}
+}
