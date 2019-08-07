@@ -1,8 +1,9 @@
 /* eslint-disable */
 import gql from 'graphql-tag';
 import * as React from 'react';
-import * as ReactApollo from 'react-apollo';
-import * as ReactApolloHooks from 'react-apollo';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactComponents from '@apollo/react-components';
+import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -62,27 +63,40 @@ export const GetAuthSessionDocument = gql`
 	}
 `;
 export type GetAuthSessionComponentProps = Omit<
-	ReactApollo.QueryProps<GetAuthSessionQuery, GetAuthSessionQueryVariables>,
+	ApolloReactComponents.QueryComponentOptions<
+		GetAuthSessionQuery,
+		GetAuthSessionQueryVariables
+	>,
 	'query'
 >;
 
 export const GetAuthSessionComponent = (
 	props: GetAuthSessionComponentProps,
 ) => (
-	<ReactApollo.Query<GetAuthSessionQuery, GetAuthSessionQueryVariables>
+	<ApolloReactComponents.Query<
+		GetAuthSessionQuery,
+		GetAuthSessionQueryVariables
+	>
 		query={GetAuthSessionDocument}
 		{...props}
 	/>
 );
 
 export function useGetAuthSessionQuery(
-	baseOptions?: ReactApolloHooks.QueryHookOptions<GetAuthSessionQueryVariables>,
+	baseOptions?: ApolloReactHooks.QueryHookOptions<
+		GetAuthSessionQuery,
+		GetAuthSessionQueryVariables
+	>,
 ) {
-	return ReactApolloHooks.useQuery<
+	return ApolloReactHooks.useQuery<
 		GetAuthSessionQuery,
 		GetAuthSessionQueryVariables
 	>(GetAuthSessionDocument, baseOptions);
 }
 export type GetAuthSessionQueryHookResult = ReturnType<
 	typeof useGetAuthSessionQuery
+>;
+export type GetAuthSessionQueryResult = ApolloReactCommon.QueryResult<
+	GetAuthSessionQuery,
+	GetAuthSessionQueryVariables
 >;

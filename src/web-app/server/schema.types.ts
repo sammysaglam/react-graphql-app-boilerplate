@@ -139,7 +139,7 @@ export type ResolversParentTypes = {
 
 export type CurrentAuthSessionResolvers<
 	ContextType = any,
-	ParentType = ResolversParentTypes['CurrentAuthSession']
+	ParentType extends ResolversParentTypes['CurrentAuthSession'] = ResolversParentTypes['CurrentAuthSession']
 > = {
 	id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 	user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -147,7 +147,7 @@ export type CurrentAuthSessionResolvers<
 
 export type MutationResolvers<
 	ContextType = any,
-	ParentType = ResolversParentTypes['Mutation']
+	ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
 	login?: Resolver<
 		Maybe<ResolversTypes['CurrentAuthSession']>,
@@ -159,7 +159,7 @@ export type MutationResolvers<
 
 export type QueryResolvers<
 	ContextType = any,
-	ParentType = ResolversParentTypes['Query']
+	ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
 	currentAuthSession?: Resolver<
 		Maybe<ResolversTypes['CurrentAuthSession']>,
@@ -170,7 +170,7 @@ export type QueryResolvers<
 
 export type UserResolvers<
 	ContextType = any,
-	ParentType = ResolversParentTypes['User']
+	ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
 > = {
 	email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 	isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;

@@ -13,7 +13,7 @@ RUN chmod -R 755 /home/node
 COPY package.json ./
 COPY yarn.lock ./
 COPY .solidarity ./
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
  # bundle app source
 COPY --chown=node . .
