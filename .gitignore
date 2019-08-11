@@ -8,3 +8,8 @@ npm-debug.*
 yarn-error.log
 build/
 .env
+
+# grahpql codegen generated files
+src/web-app/server/schema.types.ts
+src/web-app/client/gql-modules.d.ts
+src/web-app/client/types.react-apollo.tsx
