@@ -3,7 +3,6 @@ import { hot } from 'react-hot-loader/root';
 import styled, { ThemeProvider } from 'styled-components';
 import { IntlProvider, FormattedMessage } from 'react-intl';
 
-import { InjectIntlProvider } from './utils/useIntl';
 import { theme as appTheme, GlobalStyle } from '../theme/theme';
 import { useGetAuthSessionQuery } from '../types.react-apollo';
 
@@ -21,30 +20,28 @@ const App = () => {
 	return (
 		<ThemeProvider theme={appTheme}>
 			<IntlProvider locale="en">
-				<InjectIntlProvider>
-					<>
-						<GlobalStyle />
-						<Wrapper>
-							<FormattedMessage
-								defaultMessage="hello {email}"
-								description="hello world"
-								id="demo.hello"
-								values={{
-									email: (data &&
-										data.currentAuthSession &&
-										data.currentAuthSession.user &&
-										data.currentAuthSession.user.email) || (
-										<FormattedMessage
-											defaultMessage="guest"
-											description="guest"
-											id="demo.guest"
-										/>
-									),
-								}}
-							/>
-						</Wrapper>
-					</>
-				</InjectIntlProvider>
+				<>
+					<GlobalStyle />
+					<Wrapper>
+						<FormattedMessage
+							defaultMessage="hello {email}"
+							description="hello world"
+							id="demo.hello"
+							values={{
+								email: (data &&
+									data.currentAuthSession &&
+									data.currentAuthSession.user &&
+									data.currentAuthSession.user.email) || (
+									<FormattedMessage
+										defaultMessage="guest"
+										description="guest"
+										id="demo.guest"
+									/>
+								),
+							}}
+						/>
+					</Wrapper>
+				</>
 			</IntlProvider>
 		</ThemeProvider>
 	);

@@ -49,7 +49,7 @@ if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 
 const schema = makeExecutableSchema({
 	typeDefs: require('../../../build/schema/schema.graphql'),
-	resolvers: resolvers as any,
+	resolvers,
 });
 const apolloServer = new ApolloServer({
 	schema,
@@ -120,7 +120,6 @@ if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 		);
 	});
 
-	// eslint-disable-next-line no-magic-numbers
 	app.listen(3000, () =>
 		// eslint-disable-next-line no-console
 		console.log(`App running on port 3000`),

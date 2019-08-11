@@ -984,9 +984,9 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@calm/eslint-plugin-react-intl@https://github.com/sammysaglam/eslint-plugin-react-intl":
+"@calm/eslint-plugin-react-intl@git+https://github.com/sammysaglam/eslint-plugin-react-intl.git":
   version "1.3.6"
-  resolved "https://github.com/sammysaglam/eslint-plugin-react-intl#85b80d72a875b1b8522da4c1daae72631c206827"
+  resolved "git+https://github.com/sammysaglam/eslint-plugin-react-intl.git#85b80d72a875b1b8522da4c1daae72631c206827"
   dependencies:
     requireindex "~1.1.0"
 
@@ -1034,6 +1034,11 @@
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-2.5.2.tgz#4d00198b411688a2ee128a7df92ddb3b741779d6"
   integrity sha512-n/t9Si2pvCgoYnYzRsb6DgjIC09wrOM2t+E+r79WAvur/ESdU/cSse6w26gfiQUijFoU8x8AyTZ8rArBXLiDtA==
+
+"@formatjs/intl-relativetimeformat@^2.6.2":
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-2.6.2.tgz#0429e9b3bdaef8907223b1f01cee78f07b229ac9"
+  integrity sha512-JD6O2yCF2NuefU3+R7va6WmeetvajWO/ab0s4xjGpxnIMu6p9dtjTQfAhW2+NG+4Dc8MYKYo1wbJ8j02mZ1stw==
 
 "@graphql-codegen/add@^1.5.0":
   version "1.5.0"
@@ -1708,10 +1713,12 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-intl@^2.3.18":
-  version "2.3.18"
-  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.18.tgz#fd2d8b7f4d0a1dd05b5f1784ab0d7fe1786a690d"
-  integrity sha512-DVNJs49zUxKRZng8VuILE886Yihdsf3yLr5vHk9zJrmF8SyRSK3sxNSvikAKxNkv9hX55XBTJShz6CkJnbNjgg==
+"@types/react-intl@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-3.0.0.tgz#a2cce0024b6cfe403be28ccf67f49d720fa810ec"
+  integrity sha512-k8F3d05XQGEqSWIfK97bBjZe4z9RruXU9Wa7OZ2iUC5pdeIpzuQDZe/9C2J3Xir5//ZtAkhcv08Wfx3n5TBTQg==
+  dependencies:
+    react-intl "*"
 
 "@types/react-native@*":
   version "0.57.59"
@@ -5519,10 +5526,10 @@ eslint-plugin-react@^7.14.3:
     prop-types "^15.7.2"
     resolve "^1.10.1"
 
-eslint-sammy-preset@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-sammy-preset/-/eslint-sammy-preset-12.0.0.tgz#cca586c9e518be7c7c3ed6fa6e2dd0fb288ee3c5"
-  integrity sha512-vwVPdrw5Hcog6TJggF89b0wOE3Rp3J7m0j0KQGutot25a9kc4D1/+hPKZxCh+eeURQIFkbfPp8AKrtkRcgM+aQ==
+eslint-sammy-preset@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-sammy-preset/-/eslint-sammy-preset-13.0.0.tgz#bd15b2aa2f9d74255dba361138394d23fb6bd99a"
+  integrity sha512-XJvTaGIZVb8cFE3WYAZ6Mn8aZA8cTfkbBT8A8mYk6XeXQb67Zgz1771Fmz3nvUU3QiN2xvYXVC+V7nA8OxAq3w==
   dependencies:
     "@calm/eslint-plugin-react-intl" "https://github.com/sammysaglam/eslint-plugin-react-intl"
     "@typescript-eslint/eslint-plugin" "^1.13.0"
@@ -7827,15 +7834,30 @@ intl-format-cache@^4.1.6:
   resolved "https://registry.yarnpkg.com/intl-format-cache/-/intl-format-cache-4.1.6.tgz#a1f7101f435fa06cc2fe3a968f4b393663ca92a4"
   integrity sha512-A9iI5F9NgWINJ4gKZs0trME5UV/EBWq4DwSSUUijcHN6KdYDznr9pLzpuAk00orXbJi/e9SWHkKBEwEAVGNMGg==
 
+intl-format-cache@^4.1.9:
+  version "4.1.9"
+  resolved "https://registry.yarnpkg.com/intl-format-cache/-/intl-format-cache-4.1.9.tgz#16108dbde7c13013f02411bf7bdeb82c3dc17991"
+  integrity sha512-DoXRZJ7JtQsgGQDlaRkqn6KfW8B/ivBsQ17JB1kt78qHfojRIpnpbA66Ahgaj/kS5v/+gl83rLlnwdXrFY2LCw==
+
 intl-locales-supported@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/intl-locales-supported/-/intl-locales-supported-1.4.3.tgz#2cbfebe94e3954350622b518b7e1d42324ff69c9"
   integrity sha512-vkjv1mbUHy9N0gATGQ6P/ZxkxCeJfD6fBDEdwdYG3MfQfwGC5rjAFBZglH58UtGUhA22Pr/ZDxwkhr/34V8VPw==
 
+intl-locales-supported@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/intl-locales-supported/-/intl-locales-supported-1.4.4.tgz#0f2320f295de1a217de4037ede5a5f3a3ebc2320"
+  integrity sha512-dm8tjMFfy6Y+MStEBqzslnV0LTmoEAOGSnZchlKcuyOd9LlxKT8MKLOhq0KqGSRPvWfDRTs94UYTvESw5d+YYA==
+
 intl-messageformat-parser@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-3.0.2.tgz#87d26e25c5435355174ae2b7de63eaba77a0af38"
   integrity sha512-OTn9VqNEljYIGrFZOsEX94KLSY5ktZXeA7vHurwCmDZ5YypDxyF2SUSQxKHxb+782PP38omZsoLq1JHiZ2BKDQ==
+
+intl-messageformat-parser@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-3.0.6.tgz#668ffb4ff19a6bde073244c66c202fe70047aa97"
+  integrity sha512-2giAavgG1JSJooXyB0wTotuKBqk8lVz7y8ZdtR+WPlfVZv88TyIuZ85ES89cuF30H68UFqkSswpDXmwCh8X+ig==
 
 intl-messageformat@^6.0.3:
   version "6.0.3"
@@ -7844,6 +7866,14 @@ intl-messageformat@^6.0.3:
   dependencies:
     intl-format-cache "^4.1.6"
     intl-messageformat-parser "^3.0.2"
+
+intl-messageformat@^6.1.3:
+  version "6.1.3"
+  resolved "https://registry.yarnpkg.com/intl-messageformat/-/intl-messageformat-6.1.3.tgz#7ff13cfcf3a7919db6d95f4d58de8f717df0e214"
+  integrity sha512-zz2OqVRVaAjdxm1eB+YPZrlejEFxYkZXU89phvlTijKZzceAF5FtosSXgi1mMUvfFbqe2EsTI3oNW2tnoKVtcQ==
+  dependencies:
+    intl-format-cache "^4.1.9"
+    intl-messageformat-parser "^3.0.6"
 
 into-stream@^3.1.0:
   version "3.1.0"
@@ -11869,6 +11899,24 @@ react-hot-loader@^4.12.10:
     shallowequal "^1.1.0"
     source-map "^0.7.3"
 
+react-intl@*:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-3.1.5.tgz#36e5d23a15fd498cf73e2acd1735150ad96ba75d"
+  integrity sha512-o6DJeoUb3UwXAdi6JWPv75IOOJ8lemfQopD6D/oSVM1jscpHJb2BxtgHJ5Au936FekR7jv+w0EzJB4dLAPYG2A==
+  dependencies:
+    "@formatjs/intl-relativetimeformat" "^2.6.2"
+    "@types/hoist-non-react-statics" "^3.3.1"
+    "@types/invariant" "^2.2.30"
+    "@types/react" "^16.0.0"
+    hoist-non-react-statics "^3.3.0"
+    intl-format-cache "^4.1.9"
+    intl-locales-supported "^1.4.4"
+    intl-messageformat "^6.1.3"
+    intl-messageformat-parser "^3.0.6"
+    invariant "^2.1.1"
+    react "^16.3.0"
+    shallow-equal "^1.1.0"
+
 react-intl@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-3.1.1.tgz#d07774923a97daa05c529770383011cbf0c06bc3"
@@ -12038,17 +12086,7 @@ react-transform-hmr@^1.0.4:
     global "^4.3.0"
     react-proxy "^1.1.7"
 
-react@16.8.3:
-  version "16.8.3"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.8.3.tgz#c6f988a2ce895375de216edcfaedd6b9a76451d9"
-  integrity sha512-3UoSIsEq8yTJuSu0luO1QQWYbgGEILm+eJl2QN/VLDi7hL+EN18M3q3oVZwmVzzBJ3DkM7RMdRwBmZZ+b4IzSA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.13.3"
-
-react@^16.3.0:
+react@16.8.6, react@^16.3.0:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
   integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
@@ -12624,7 +12662,7 @@ sax@~1.1.1:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.1.6.tgz#5d616be8a5e607d54e114afae55b7eaf2fcc3240"
   integrity sha1-XWFr6KXmB9VOEUr65Vt+ry/MMkA=
 
-scheduler@^0.13.3, scheduler@^0.13.6:
+scheduler@^0.13.6:
   version "0.13.6"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
   integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==

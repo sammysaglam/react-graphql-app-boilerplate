@@ -1,5 +1,6 @@
 import deepmerge from 'deepmerge';
+import { Resolvers } from '../schema.types';
+
 import { resolvers as authResolvers } from './auth/auth.resolvers';
-import { Resolvers } from '../types';
 
 export const resolvers: Resolvers = deepmerge.all([authResolvers]);

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT } from '../../utils/config';
-import { Resolvers } from '../../types';
+import { Resolvers } from '../../schema.types';
 
 export const resolvers: Resolvers = {
 	Query: {

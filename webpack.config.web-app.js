@@ -83,6 +83,7 @@ module.exports = env => {
 							compress: true,
 							port: WEBPACKDEV_PORT,
 							host: '0.0.0.0',
+							disableHostCheck: true,
 							headers: {
 								'Access-Control-Allow-Origin': '*',
 								'Access-Control-Allow-Methods':
@@ -179,7 +180,6 @@ module.exports = env => {
 					{
 						test: /\.(css|scss)$/,
 						loader: ['style-loader', 'css-loader', 'sass-loader'],
-						exclude: /node_modules/,
 					},
 					{
 						test: /\.(graphql|gql)$/,

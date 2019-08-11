@@ -11,7 +11,11 @@
 				"typescript",
 				"typescript-operations",
 				"typescript-resolvers"
-			]
+			],
+			"config": {
+				"contextType": "./types#Context",
+				"useIndexSignature": true
+			}
 		},
 		"./src/web-app/client/gql-modules.d.ts": {
 			"plugins": [
