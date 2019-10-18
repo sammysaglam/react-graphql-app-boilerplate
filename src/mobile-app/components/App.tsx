@@ -1,7 +1,7 @@
 import React from 'react';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 import { Text } from 'react-native';
 import styled from 'styled-components/native';
-import { IntlProvider, FormattedMessage } from 'react-intl';
 
 const Wrapper = styled.View`
 	flex: 1;

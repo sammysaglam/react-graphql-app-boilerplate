@@ -1,9 +1,9 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 import styled, { ThemeProvider } from 'styled-components';
-import { IntlProvider, FormattedMessage } from 'react-intl';
 
-import { theme as appTheme, GlobalStyle } from '../theme/theme';
+import { GlobalStyle, appTheme } from '../theme/theme';
 import { useGetAuthSessionQuery } from '../types.react-apollo';
 
 const Wrapper = styled.div`

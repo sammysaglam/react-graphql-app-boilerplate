@@ -35,6 +35,9 @@
 				"withHooks": true,
 				"hooksImportFrom": "react-apollo"
 			}
+		},
+		"./src/web-app/client/fragmentTypes.json": {
+			"plugins": ["fragment-matcher"]
 		}
 	}
 }

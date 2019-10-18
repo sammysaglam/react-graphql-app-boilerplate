@@ -12,6 +12,7 @@
 		"noEmit": true,
 		"strict": true,
 		"target": "esnext",
+		"module": "commonjs",
 		"plugins": [{ "transform": "ts-optchain/transform" }]
 	},
 	"exclude": ["node_modules"]

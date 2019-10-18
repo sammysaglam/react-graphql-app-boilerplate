@@ -8,7 +8,7 @@
 			{
 				"rule": "cli",
 				"binary": "node",
-				"semver": "12.2.0",
+				"semver": "12.10.0",
 				"error": "You have node@{{installedVersion}}, and need node@{{wantedVersion}}. Fix with `nvm install {{wantedVersion}} && nvm use`"
 			}
 		],
@@ -16,7 +16,7 @@
 			{
 				"rule": "cli",
 				"binary": "npm",
-				"semver": "6.9.0",
+				"semver": "6.10.3",
 				"error": "You have npm@{{installedVersion}}, and need npm@{{wantedVersion}}."
 			}
 		],
@@ -24,7 +24,7 @@
 			{
 				"rule": "cli",
 				"binary": "yarn",
-				"semver": "1.15.2",
+				"semver": "1.17.3",
 				"error": "You have yarn@{{installedVersion}}, and need yarn@{{wantedVersion}}. Fix with `npm install -g yarn@{{wantedVersion}}`"
 			}
 		]

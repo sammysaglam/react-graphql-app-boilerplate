@@ -12,4 +12,4 @@ export const WEBSOCKETS_ENDPOINT = `${
 	PROTOCOL === 'https:' ? 'wss:' : 'ws:'
 }//${HOSTNAME}:${PORT}/websocket/`;
 
-export const GRAPHQL_ENDPOINT = API_ENDPOINT + 'graphql';
+export const GRAPHQL_ENDPOINT = `${API_ENDPOINT}graphql`;

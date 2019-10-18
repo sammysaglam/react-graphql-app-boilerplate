@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { createGlobalStyle, css, ThemeContext } from 'styled-components';
+import { ThemeContext, createGlobalStyle, css } from 'styled-components';
 
 const rgba = (red: number, green: number, blue: number) => (
 	alpha: number | object,
@@ -8,7 +8,36 @@ const rgba = (red: number, green: number, blue: number) => (
 		? `rgb(${red},${green},${blue})`
 		: `rgba(${red},${green},${blue},${alpha})`;
 
-export const theme = {
+type RgbaReturnType = ReturnType<typeof rgba>;
+
+// eslint-disable-next-line func-style
+function colorCollection<Collections>(
+	collection: { default: RgbaReturnType } & Collections,
+) {
+	const collectionKeys = Object.keys(collection);
+	type CollectionName = keyof Collections;
+
+	return (
+		colorVariantNameOrAlpha: CollectionName | number | object,
+	): RgbaReturnType => {
+		if (collectionKeys.includes(colorVariantNameOrAlpha as string)) {
+			const key = colorVariantNameOrAlpha as CollectionName;
+
+			// @ts-ignore
+			return collection[key];
+		}
+
+		if (typeof colorVariantNameOrAlpha === 'number') {
+			// @ts-ignore
+			return collection.default(colorVariantNameOrAlpha as number);
+		}
+
+		// @ts-ignore
+		return collection.default(colorVariantNameOrAlpha as object);
+	};
+}
+
+export const appTheme = {
 	fonts: {
 		primary: `
 			font-family: Arial;
@@ -27,6 +56,17 @@ export const theme = {
 		grey300: rgba(240, 240, 240),
 		grey400: rgba(220, 220, 220),
 		grey500: rgba(95, 95, 95),
+
+		text: colorCollection({
+			light: rgba(40, 40, 40),
+			default: rgba(25, 25, 25),
+			'against-light-background': rgba(5, 11, 30),
+			'against-dark-background': rgba(255, 255, 255),
+		}),
+		background: colorCollection({
+			default: rgba(255, 255, 255),
+			dark: rgba(5, 11, 30),
+		}),
 	},
 	breakpoints: {
 		mobile: '768px',
@@ -36,8 +76,6 @@ export const theme = {
 		topnav: 10,
 	},
 };
-
-export type ThemeType = typeof theme;
 
 export const useTheme = () => {
 	const themeFromContext = useContext(ThemeContext);
@@ -53,7 +91,7 @@ export const GlobalStyle = createGlobalStyle`${css`
 
 	html {
 		font-size: 50%;
-		${({ theme: theme_ }) => theme_.fonts.primary};
+		${({ theme }) => theme.fonts.primary};
 	}
 
 	body {
@@ -71,7 +109,7 @@ export const GlobalStyle = createGlobalStyle`${css`
 	h4,
 	h5,
 	h6 {
-		${({ theme: theme_ }) => theme_.fonts.secondary};
+		${({ theme }) => theme.fonts.secondary};
 	}
 
 	a {

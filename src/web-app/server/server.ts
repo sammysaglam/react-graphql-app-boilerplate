@@ -1,18 +1,26 @@
 import './utils/load-env-vars';
-import { JWT, ENV, DEV_TOOLS } from './utils/config';
-import express from 'express';
-import compression from 'compression';
+
+import {
+	InMemoryCache,
+	IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client';
+import { SchemaLink } from 'apollo-link-schema';
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express';
-import { resolvers } from './features/resolvers';
+import bodyParser from 'body-parser';
+import compression from 'compression';
 import Cookies from 'cookies';
 import cors from 'cors';
-import helmet from 'helmet';
-import bodyParser from 'body-parser';
+import express from 'express';
 import expressJwt from 'express-jwt';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { SchemaLink } from 'apollo-link-schema';
+import helmet from 'helmet';
+
+import { defaultLocalState } from '../client/local-state/local-state';
+import { resolvers } from './features/resolvers';
 import { Context } from './types';
+import { DEV_TOOLS, ENV, JWT } from './utils/config';
+
+const introspectionQueryResultData = require('../client/fragmentTypes.json');
 
 const app = express();
 
@@ -57,10 +65,11 @@ const apolloServer = new ApolloServer({
 		cookies: req.cookies,
 		user: req.user,
 	}),
+	tracing: DEV_TOOLS.GRAPHQL_PLAYGROUND_ENABLED,
 	introspection: DEV_TOOLS.GRAPHQL_PLAYGROUND_ENABLED,
 	playground: DEV_TOOLS.GRAPHQL_PLAYGROUND_ENABLED
 		? {
-				version: '1.7.30',
+				version: '1.7.31',
 				settings: { 'request.credentials': 'include' },
 		  }
 		: false,
@@ -91,7 +100,18 @@ if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 
 	// send app to client
 	app.get('*', async ({ originalUrl, cookies, user }, res) => {
-		// const accessToken = cookies.get('accessToken');
+		const fragmentMatcher = new IntrospectionFragmentMatcher({
+			introspectionQueryResultData,
+		});
+
+		const apolloCache = new InMemoryCache({ fragmentMatcher });
+
+		apolloCache.writeData({
+			data: {
+				...defaultLocalState,
+			},
+		});
+
 		const apolloClient = new ApolloClient({
 			ssrMode: true,
 			link: new SchemaLink({
@@ -101,7 +121,8 @@ if (process.env.USE_WEBPACKDEV_SERVER === 'true') {
 					cookies,
 				}),
 			}),
-			cache: new InMemoryCache(),
+			cache: apolloCache,
+			resolvers: {},
 		});
 
 		const { ssrStringAsync, stylesheet } = ssrBuilder({

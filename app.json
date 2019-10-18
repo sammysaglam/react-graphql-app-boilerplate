@@ -3,7 +3,7 @@
 		"name": "react-graphql-app-boilerplate",
 		"slug": "react-graphql-app-boilerplate",
 		"privacy": "public",
-		"sdkVersion": "34.0.0",
+		"sdkVersion": "35.0.0",
 		"platforms": ["ios", "android", "web"],
 		"version": "1.0.0",
 		"orientation": "portrait",

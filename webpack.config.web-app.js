@@ -8,6 +8,7 @@ const HTMLMinifier = require('html-minifier');
 const nodeExternals = require('webpack-node-externals');
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
 const jsonminify = require('jsonminify');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
@@ -22,7 +23,7 @@ const copyFiles = ({ isProduction }) =>
 				from: {
 					glob: '**/*.+(html|json|png|svg|jpg|jpeg|gif|ttf|woff|eot)',
 				},
-				context: 'src/client',
+				context: 'src/web-app/client',
 				to: './[path]/[name].[ext]',
 				transform: (fileContents, filepath) => {
 					if (!isProduction) return fileContents;
@@ -93,10 +94,10 @@ module.exports = env => {
 							},
 							proxy: {
 								'/graphql/*': {
-									target: 'http://0.0.0.0:' + DEV_API_PORT,
+									target: `http://0.0.0.0:${DEV_API_PORT}`,
 								},
 								'/websocket/*': {
-									target: 'http://0.0.0.0:' + DEV_API_PORT,
+									target: `http://0.0.0.0:${DEV_API_PORT}`,
 									ws: true,
 								},
 							},
@@ -143,7 +144,12 @@ module.exports = env => {
 								cleanOnceBeforeBuildPatterns: 'build/client',
 							}),
 					  ]
-					: []),
+					: [
+							new ForkTsCheckerWebpackPlugin({
+								reportFiles: ['src/**/*.{ts,tsx}'],
+								memoryLimit: 8192,
+							}),
+					  ]),
 
 				new webpack.DefinePlugin({
 					'process.env.USE_WEBPACKDEV_SERVER': isHotLoaderEnv

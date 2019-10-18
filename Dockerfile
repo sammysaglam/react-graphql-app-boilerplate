@@ -1,4 +1,4 @@
-FROM circleci/node:12.2.0-browsers
+FROM circleci/node:12.10.0-browsers
 USER node
 
 # create & use workdir
